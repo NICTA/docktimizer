@@ -35,7 +35,6 @@ limitations under the License.
 * Hamcrest, 1.3, BSD, http://hamcrest.org
 * Mockito, 1.10.19, MIT, http://mockito.org
 * jclouds, 1.9.1, Apache 2.0, https://jclouds.apache.org
-* [REMOVED] MySQL Connector Java, 5.1.25, GPL 2, http://www.mysql.com
 * Spotify Docker Client, 2.7.7, Apache 2.0, https://github.com/spotify/docker-client
 * Jersey, 1.19, CDDL 1.1 & GPL 2, https://jersey.java.net/index.html
 * jetcd, 0.3.0, Apache 2.0, https://github.com/justinsb/jetcd
@@ -44,7 +43,7 @@ limitations under the License.
 * WireMock, 1.54, Apache 2.0, http://wiremock.org
 * Java ILP, 1.0, Lesser GPL, http://javailp.sourceforge.net
 * MariaDB Connector/J, 1.2.3, Lesser GPL, https://mariadb.org
-
+* AWS Java SDK, 1.10.31, Apache 2.0, https://github.com/aws/aws-sdk-java
 
 ### Installation    
 
