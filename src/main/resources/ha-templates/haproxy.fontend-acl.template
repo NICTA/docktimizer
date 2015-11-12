@@ -1,0 +1,2 @@
+    acl url_#{NAME} path_beg /#{NAME}
+    use_backend #{NAME} if url_#{NAME}

@@ -1,0 +1,49 @@
+#cloud-config
+write_files:
+  - path: /etc/systemd/system/docker.service.d/50-insecure-registry.conf
+    content: |
+        [Service]
+        Environment=DOCKER_OPTS='--label="vm=$private_ipv4"'
+coreos:
+  #update strategy
+  update:
+    reboot-strategy: etcd-lock
+  #enable listening on port 2375
+  etcd:
+    # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=3
+    # specify the intial size of your cluster with ?size=X
+    discovery: https://discovery.etcd.io/cc4656462d995c7e526d85ef692e3c4f
+    # multi-region and multi-cloud deployments need to use $public_ipv4
+    addr: $private_ipv4:4001
+    peer-addr: $private_ipv4:7001
+  units:
+    - name: etcd.service
+      command: start
+    - name: fleet.service
+      command: start
+    - name: docker-tcp.socket
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Docker Socket for the API
+
+        [Socket]
+        ListenStream=2375
+        BindIPv6Only=both
+        Service=docker.service
+
+        [Install]
+        WantedBy=sockets.target
+    - name: docker-swarm.service
+      command: start
+      content: |
+        [Unit]
+        Description=Connect to docker swarm
+        After=docker.service
+
+        [Service]
+        Restart=always
+        ExecStart=/usr/bin/docker run --name swarm-master --restart="always" -p 2376:2375 -t swarm manage etcd://$private_ipv4:4001/swarm
+ssh_authorized_keys:  # include one or more SSH public keys
+  - ssh-rsa InsertRSAKeyHere

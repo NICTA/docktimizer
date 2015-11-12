@@ -1,0 +1,44 @@
+#cloud-config
+
+write_files:
+  - path: /etc/systemd/system/docker.service.d/50-insecure-registry.conf
+    content: |
+        [Service]
+        Environment=DOCKER_OPTS='--label="vm=$private_ipv4"'
+coreos:
+  #update strategy
+  update:
+    reboot-strategy: off # etcd-lock would also be possible, for now, don't reboot
+  #enable listening on port 2375
+  units:
+    - name: etcd.service
+      command: start
+    - name: fleet.service
+      command: start
+    - name: docker-tcp.socket
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Docker Socket for the API
+
+        [Socket]
+        ListenStream=2375
+        BindIPv6Only=both
+        Service=docker.service
+
+        [Install]
+        WantedBy=sockets.target
+    - name: docker-startup.service
+      command: start
+      content: |
+        [Unit]
+        Description=Connect to docker swarm
+        After=docker.service
+
+        [Service]
+        Restart=always
+        ExecStart=/usr/bin/echo \"Starting Docker Containers...\"
+#{DOCKER-UNITS}
+ssh_authorized_keys:  # include one or more SSH public keys
+  - ssh-rsa InsertRSAKeyHere

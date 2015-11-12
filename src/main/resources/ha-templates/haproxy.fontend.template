@@ -1,0 +1,17 @@
+frontend localnodes
+    bind *:8081
+    mode http
+#{ACLs}
+    acl url_google path_beg /google
+    use_backend google if url_google
+    default_backend google
+
+backend google
+    mode http
+    balance roundrobin
+    option forwardfor
+    http-request set-header X-Forwarded-Port %[dst_port]
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+    option httpchk HEAD / HTTP/1.1\r\nHost:localhost
+    reqrep ^([^\ :]*)\ /google/(.*)     \1\ /\2
+    server google 23.92.30.78:80 check

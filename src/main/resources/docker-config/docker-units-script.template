@@ -1,0 +1,10 @@
+    - name: docker-#{name}-startup.service
+      command: start
+      content: |
+        [Unit]
+        Description=Just a docker container
+        After=docker.service
+
+        [Service]
+        Restart=false
+        ExecStart=#{RUN-CMD}
