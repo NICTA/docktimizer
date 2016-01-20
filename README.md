@@ -4,8 +4,9 @@ Docktimizer
 Short Description
 ----------------
 
-This project implements a multi-objective optimization model for
-scaling Virtual Machines and Docker containers as described in [1]
+With the advent of Docker, it became popular to bundle Web applications (apps) and their libraries into lightweight linux containers and offer them to a wide public by deploying them in the cloud. Compared to previous approaches, like deploying apps in cloud-provided virtual machines (VMs), the use of containers allows faster start-up and less overhead. However, having containers inside VMs makes the decision about elastic scaling more flexible but also more complex. Docktimizer makes those decisions based on a sound mathematical optimization problem. Our evaluation of Docktimizer showed that it can reduce the average cost per request by about 20-28%. More details can be found here: http://ssrg.nicta.com.au/publications/nictaabstracts/8901.pdf
+
+Docktimizer implements autoscaling of Docker containers on VMs. In this setting, four dimensions of scaling have to be considered: VMs and containers can be adjusted horizontally (changes in the number of instances) and vertically (changes in the computational resources available to instances). Docktimizer uses mathematical optimization algorithms to make the scaling decisions, but its usage does not require any in-depth knowledge of these algorithms.
 
 
 ### License
@@ -177,8 +178,3 @@ This package contains the main controllers and has the following classes
 
 * au.csiro.data61.docktimizer:
     * DockerPlacementServer: starts up a HTTP server and publishes the RESTful API
-
-
-[1] P. Hoenisch, I. Weber, S. Schulte, L. Zhu, and A. Fekete, “Four-fold Auto-scaling on a Contemporary Deployment
-Platform using Docker Containers (accepted for publication),” in 13th International Conference on Service Oriented
-Computing (ICSOC 2015), Goa, India, 2015, pp. NN-NN.
